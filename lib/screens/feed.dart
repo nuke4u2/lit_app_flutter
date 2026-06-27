@@ -4,6 +4,7 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:lit_reader/env/consts.dart';
 import 'package:lit_reader/env/global.dart';
 import 'package:lit_reader/models/activity_data.dart';
+import 'package:lit_reader/models/activity_wall.dart';
 import 'package:lit_reader/screens/widgets/drawer_widget.dart';
 import 'package:lit_reader/screens/widgets/empty_list_indicator.dart';
 import 'package:lit_reader/screens/widgets/logged_in_error.dart';
@@ -40,10 +41,15 @@ class _FeedScreenState extends State<FeedScreen> {
         lastId = null;
       }
       int limit = 25;
-      final newItems =
-          viewOld ? await api.getOldFeed(limit: limit, lastId: lastId) : await api.getFeed(limit: limit, lastId: lastId);
+      ActivityWall? newItems;
 
-      if (lastId == newItems.data.last.id) {
+      if (viewOld) {
+        newItems = await api.getOldFeed(limit: limit, lastId: lastId);
+      } else {
+        newItems = await api.getFeed(limit: limit, lastId: lastId);
+      }
+
+      if (newItems.data.isEmpty || lastId == newItems.data.last.id) {
         //no new items
         return [];
       }
