@@ -57,8 +57,11 @@ void main() {
     expect(find.text('private story content'), findsOneWidget);
     expect(find.text('Lit Reader is locked'), findsNothing);
 
-    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
     await tester.pump();
+
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    await tester.pumpAndSettle();
 
     expect(find.text('Lit Reader is locked'), findsOneWidget);
     expect(find.text('private story content'), findsNothing);
