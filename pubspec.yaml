@@ -60,7 +60,7 @@ dependencies:
   intl: ^0.20.2
   moon_design: ^1.1.0
   shared_preferences: ^2.5.3
-  package_info_plus: ^9.0.0
+  package_info_plus: ^10.2.1
   file_picker: ^10.3.7
   permission_handler: ^12.0.1
 
