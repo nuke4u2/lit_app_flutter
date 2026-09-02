@@ -4,20 +4,33 @@ on:
   push:
     branches:
       - main # Change to the branch you want to trigger the build
-  pull_request:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      HAS_RELEASE_SECRETS: ${{ secrets.KEYSTORE_BASE64 != '' && secrets.KEYSTORE_PASSWORD != '' && secrets.KEY_PASSWORD != '' && secrets.KEY_ALIAS != '' && secrets.TOKEN != '' }}
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      - name: Set Up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set Up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android 17 SDK
+        run: sdkmanager "platforms;android-37" "build-tools;37.0.0" "ndk;28.2.13676358"
 
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: "3.32.4"
+          flutter-version: "3.47.2"
           channel: "stable"
           cache: true
 
@@ -32,21 +45,28 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
+      - name: Run Tests
+        run: flutter test
+
       - name: Decode Keystore
+        if: env.HAS_RELEASE_SECRETS == 'true'
         run: |
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
 
       - name: Debug Keystore
+        if: env.HAS_RELEASE_SECRETS == 'true'
         run: |
           ls -l android/app/keystore.jks
           file android/app/keystore.jks
 
       - name: Verify Keystore Password
+        if: env.HAS_RELEASE_SECRETS == 'true'
         run: |
           keytool -list -keystore android/app/keystore.jks -storepass "${{ secrets.KEYSTORE_PASSWORD }}" -alias "${{ secrets.KEY_ALIAS }}"
         shell: bash
 
       - name: Create key.properties
+        if: env.HAS_RELEASE_SECRETS == 'true'
         run: |
           echo "storePassword=${{ secrets.KEYSTORE_PASSWORD }}" > android/key.properties
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
@@ -54,6 +74,7 @@ jobs:
           echo "storeFile=keystore.jks" >> android/key.properties
 
       - name: Build APK
+        if: env.HAS_RELEASE_SECRETS == 'true'
         env:
           storePassword: ${{ secrets.KEYSTORE_PASSWORD }}
           keyAlias: ${{ secrets.KEY_ALIAS }}
@@ -61,18 +82,21 @@ jobs:
         run: flutter build apk --release --split-per-abi
 
       - name: Extract version from pubspec.yaml
+        if: env.HAS_RELEASE_SECRETS == 'true'
         id: extract_version
         run: |
           version=$(grep '^version: ' pubspec.yaml | cut -d ' ' -f 2 | tr -d '\r')
           echo "VERSION=$version" >> $GITHUB_ENV
 
       - name: Rename APKs
+        if: env.HAS_RELEASE_SECRETS == 'true'
         run: |
           for file in build/app/outputs/flutter-apk/app-*; do
             mv "$file" "${file/app-/lit-app-${{ env.VERSION }}-}"
           done
 
       - name: Upload Artifacts
+        if: env.HAS_RELEASE_SECRETS == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: Releases
@@ -80,6 +104,7 @@ jobs:
             build/app/outputs/flutter-apk/*
 
       - name: Check if Tag Exists
+        if: env.HAS_RELEASE_SECRETS == 'true'
         id: check_tag
         run: |
           if git rev-parse "v${{ env.VERSION }}" >/dev/null 2>&1; then
@@ -88,15 +113,27 @@ jobs:
             echo "TAG_EXISTS=false" >> $GITHUB_ENV
           fi
       - name: Modify Tag
-        if: env.TAG_EXISTS == 'true'
+        if: env.HAS_RELEASE_SECRETS == 'true' && env.TAG_EXISTS == 'true'
         id: modify_tag
         run: |
           new_version="${{ env.VERSION }}-build-${{ github.run_number }}"
           echo "VERSION=$new_version" >> $GITHUB_ENV
 
       - name: Create Release
+        if: env.HAS_RELEASE_SECRETS == 'true'
         uses: ncipollo/release-action@v1
         with:
           artifacts: "build/app/outputs/flutter-apk/*"
           tag: v${{ env.VERSION }}
           token: ${{ secrets.TOKEN }}
+
+      - name: Build Debug APK
+        if: env.HAS_RELEASE_SECRETS != 'true'
+        run: flutter build apk --debug
+
+      - name: Upload Debug APK
+        if: env.HAS_RELEASE_SECRETS != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: lit-reader-private-debug
+          path: build/app/outputs/flutter-apk/app-debug.apk

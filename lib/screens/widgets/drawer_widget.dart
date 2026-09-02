@@ -4,6 +4,7 @@ import 'package:lit_reader/env/global.dart';
 import 'package:lit_reader/screens/backup.dart';
 import 'package:lit_reader/screens/log_screen.dart';
 import 'package:lit_reader/screens/login.dart';
+import 'package:lit_reader/screens/pin/pin_settings_screen.dart';
 
 class DrawerWidget extends StatelessWidget {
   const DrawerWidget({super.key});
@@ -60,6 +61,17 @@ class DrawerWidget extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => const BackupScreen()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.lock_outline),
+                  title: const Text('App PIN'),
+                  subtitle: Text(pinController.isEnabled ? 'On' : 'Off'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const PinSettingsScreen()),
                     );
                   },
                 ),

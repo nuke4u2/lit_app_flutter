@@ -146,9 +146,13 @@ class _StoryScreenState extends State<StoryScreen> {
   void initState() {
     super.initState();
     setInitState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      systemNavigationBarColor: Colors.transparent,
-      systemNavigationBarDividerColor: Colors.transparent,
+      statusBarColor: Colors.transparent,
+      systemNavigationBarColor: Colors.black,
+      systemNavigationBarDividerColor: Colors.black,
+      statusBarIconBrightness: Brightness.light,
+      systemNavigationBarIconBrightness: Brightness.light,
     ));
   }
 
@@ -189,12 +193,6 @@ class _StoryScreenState extends State<StoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // print(scrollController.offset);
-    if (isFabVisible) {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    } else {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.leanBack, overlays: []);
-    }
     return FutureBuilder(
       future: _fetchPagesFuture,
       builder: (context, snapshot) {
@@ -209,10 +207,10 @@ class _StoryScreenState extends State<StoryScreen> {
             },
             child: Scaffold(
               resizeToAvoidBottomInset: false,
-              // backgroundColor: Colors.grey[850],
+              backgroundColor: Colors.black,
               body: SafeArea(
-                top: false,
-                bottom: false,
+                top: true,
+                bottom: true,
                 child: Stack(children: [
                   body(),
                   // slider(),
@@ -286,8 +284,8 @@ class _StoryScreenState extends State<StoryScreen> {
                   ),
                 ]),
               ),
-              floatingActionButton: Padding(
-                padding: const EdgeInsets.only(bottom: 20),
+              floatingActionButton: SafeArea(
+                minimum: const EdgeInsets.only(bottom: 12),
                 child: SpeedDial(
                   backgroundColor: kRed,
                   visible: isFabVisible,

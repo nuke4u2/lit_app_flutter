@@ -10,6 +10,7 @@ import 'package:lit_reader/controllers/history_download_screen_controller.dart';
 import 'package:lit_reader/controllers/lists_controller.dart';
 import 'package:lit_reader/controllers/log_controller.dart';
 import 'package:lit_reader/controllers/login_controller.dart';
+import 'package:lit_reader/controllers/pin_controller.dart';
 import 'package:lit_reader/controllers/search_controller.dart' as searchController;
 import 'package:lit_reader/controllers/ui_controller.dart';
 import 'package:lit_reader/controllers/update_controller.dart';
@@ -69,3 +70,5 @@ HistoryDownloadController get historyDownloadController => Get.put(HistoryDownlo
 ListController get listController => Get.put(ListController());
 UIController get uiController => Get.put(UIController());
 UpdateController get updateController => Get.put(UpdateController());
+
+final PinController pinController = PinController();
