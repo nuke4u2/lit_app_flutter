@@ -1,0 +1,59 @@
+name: Validate
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set Up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set Up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Stable Android SDK
+        run: sdkmanager --install "platforms;android-36" "build-tools;36.0.0" "ndk;28.2.13676358"
+
+      - name: Set Up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.47.2"
+          channel: "stable"
+          cache: true
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Upload Resolved Dependency Lock
+        uses: actions/upload-artifact@v4
+        with:
+          name: resolved-pubspec-lock
+          path: pubspec.lock
+
+      - name: Analyze Source
+        run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Run Tests
+        run: flutter test
+
+      - name: Build Debug APK
+        run: flutter build apk --debug
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: lit-reader-private-debug
+          path: build/app/outputs/flutter-apk/app-debug.apk

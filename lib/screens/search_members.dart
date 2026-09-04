@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:lit_reader/classes/search_config.dart';
 import 'package:lit_reader/env/colors.dart';
 import 'package:lit_reader/env/consts.dart';
@@ -128,7 +127,7 @@ class _SearchMembersScreenState extends State<SearchMembersScreen> {
                 litSearchController.togglePageIndex();
               }),
           IconButton(
-            icon: const Icon(Ionicons.filter),
+            icon: const Icon(Icons.filter_alt),
             onPressed: () {
               filterFormDialog(context);
             },

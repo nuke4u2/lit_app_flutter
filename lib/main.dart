@@ -10,6 +10,7 @@ import 'package:lit_reader/env/colors.dart';
 import 'package:lit_reader/env/consts.dart';
 import 'package:lit_reader/env/global.dart';
 import 'package:lit_reader/screens/home.dart';
+import 'package:lit_reader/screens/pin/app_lock_gate.dart';
 import 'package:logging/logging.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -22,6 +23,7 @@ Future<void> main() async {
   });
   WidgetsFlutterBinding.ensureInitialized();
   await initSharedPreferences();
+  await pinController.initialize();
   await getAppVersion();
   await updateController.checkForUpdate();
   _initServices();
@@ -91,6 +93,10 @@ class _MyAppState extends State<MyApp> {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
+      builder: (context, child) => AppLockGate(
+        controller: pinController,
+        child: child ?? const SizedBox.shrink(),
+      ),
       home: const HomeScreen(),
     );
   }

@@ -15,6 +15,10 @@ Here're some of the project's best features:
 - Search By Tags Category or Words
 - Explore By Popular Tags or Categories
 - View Similar Stories All Chapters in a Series or More stories by the same Author
+- Cutout-safe reading view that stays clear of camera and system-navigation insets
+- Optional 4-digit app PIN that relocks when the app leaves the foreground
+
+The PIN is stored using Android Keystore-backed encrypted storage. When the PIN is enabled, Android also protects the app's background/Recents image while Lit Reader is locked.
 
 <h2>🛠️ Installation Steps:</h2>
 

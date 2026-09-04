@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:lit_reader/env/colors.dart';
 import 'package:lit_reader/env/global.dart';
 import 'package:lit_reader/screens/explore.dart';
@@ -31,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
               if (persistentTabcontroller.index == 0) {
                 historyDownloadController.selectedIndex = historyDownloadController.selectedIndex == 1 ? 0 : 1;
                 historyDownloadController.selectedTabIcon =
-                    historyDownloadController.selectedIndex == 0 ? const Icon(Ionicons.time) : const Icon(Ionicons.download);
+                    historyDownloadController.selectedIndex == 0 ? const Icon(Icons.history) : const Icon(Icons.download);
                 historyDownloadController.selectedTabName =
                     historyDownloadController.selectedIndex == 0 ? "History" : "Downloads";
               }
@@ -55,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
             PersistentTabConfig(
               screen: const ExploreScreen(),
               item: ItemConfig(
-                icon: const Icon(Ionicons.bar_chart),
+                icon: const Icon(Icons.bar_chart),
                 title: ("Explore"),
                 activeForegroundColor: kRed,
                 inactiveForegroundColor: Colors.grey,
@@ -73,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
             PersistentTabConfig(
               screen: const FeedScreen(),
               item: ItemConfig(
-                icon: const Icon(Ionicons.newspaper),
+                icon: const Icon(Icons.article_outlined),
                 title: ("Feed"),
                 activeForegroundColor: kRed,
                 inactiveForegroundColor: Colors.grey,
@@ -82,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
             PersistentTabConfig(
               screen: const ListScreen(),
               item: ItemConfig(
-                icon: const Icon(Ionicons.list),
+                icon: const Icon(Icons.list),
                 title: ("Lists"),
                 activeForegroundColor: kRed,
                 inactiveForegroundColor: Colors.grey,
