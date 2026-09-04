@@ -16,7 +16,7 @@ if (keystorePropertiesFile.exists()) {
 android {
     namespace = "com.example.lit_reader"
     compileSdk = 36
-    ndkVersion = "27.0.12077973"
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -25,7 +25,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.lit_reader"
-        // flutter_secure_storage 11 uses the modern Android Keystore APIs.
+        // Modern Android plugins require API level 24 or newer.
         minSdk = 24
         targetSdk = 36
         versionCode = flutter.versionCode

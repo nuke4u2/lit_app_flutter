@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:lit_reader/classes/db_helper.dart';
 import 'package:lit_reader/env/global.dart';
 import 'package:lit_reader/models/story_download.dart';
@@ -133,9 +132,9 @@ class _DownloadScreenState extends State<DownloadScreen> {
             onPressed: () {
               historyDownloadController.selectedIndex = 0;
               historyDownloadController.selectedTabName = "History";
-              historyDownloadController.selectedTabIcon = const Icon(Ionicons.time);
+              historyDownloadController.selectedTabIcon = const Icon(Icons.history);
             },
-            icon: const Icon(Ionicons.time),
+            icon: const Icon(Icons.history),
           ),
         ],
       ),

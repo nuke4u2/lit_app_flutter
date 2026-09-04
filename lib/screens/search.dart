@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:ionicons/ionicons.dart';
 import 'package:lit_reader/classes/search_config.dart';
 import 'package:lit_reader/env/colors.dart';
 import 'package:lit_reader/env/consts.dart';
@@ -133,7 +132,7 @@ class _SearchScreenState extends State<SearchScreen> {
           actions: [
             if (litSearchController.categorySearch || litSearchController.searchTags)
               IconButton(
-                  icon: const Icon(Ionicons.close),
+                  icon: const Icon(Icons.close),
                   onPressed: () {
                     if (litSearchController.categorySearch) {
                       litSearchController.categorySearch = false;
@@ -161,7 +160,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   litSearchController.togglePageIndex();
                 }),
             IconButton(
-              icon: const Icon(Ionicons.filter),
+              icon: const Icon(Icons.filter_alt),
               onPressed: () {
                 filterFormDialog(context);
               },
@@ -272,7 +271,7 @@ class _SearchScreenState extends State<SearchScreen> {
           children: <Widget>[
             LitSearchBar(
               margin: 0,
-              prefixIcon: Ionicons.person,
+              prefixIcon: Icons.person,
               labelText: "Author",
               formKey: filtersformKey,
               onChanged: () {
