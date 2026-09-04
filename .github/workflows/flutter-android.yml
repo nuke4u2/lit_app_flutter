@@ -24,8 +24,8 @@ jobs:
       - name: Set Up Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android 17 SDK
-        run: sdkmanager --install "platforms;android-37" "build-tools;37.0.0" "ndk;27.0.12077973"
+      - name: Install Stable Android SDK
+        run: sdkmanager --install "platforms;android-36" "build-tools;36.0.0" "ndk;27.0.12077973"
 
       - name: Set Up Flutter
         uses: subosito/flutter-action@v2
